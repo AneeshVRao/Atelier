@@ -47,35 +47,194 @@ export type Database = {
         }
         Relationships: []
       }
+      outfit_calendar: {
+        Row: {
+          created_at: string
+          id: string
+          is_completed: boolean | null
+          notes: string | null
+          occasion: string | null
+          outfit_items: Json | null
+          planned_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          notes?: string | null
+          occasion?: string | null
+          outfit_items?: Json | null
+          planned_date: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          notes?: string | null
+          occasion?: string | null
+          outfit_items?: Json | null
+          planned_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          avatar_url: string | null
+          body_type: string | null
+          budget_range: string | null
           color_palette: string | null
           created_at: string
           full_name: string | null
+          height: string | null
           id: string
           occasions: string[] | null
+          preferred_brands: string[] | null
           style_preference: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          avatar_url?: string | null
+          body_type?: string | null
+          budget_range?: string | null
           color_palette?: string | null
           created_at?: string
           full_name?: string | null
+          height?: string | null
           id?: string
           occasions?: string[] | null
+          preferred_brands?: string[] | null
           style_preference?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          avatar_url?: string | null
+          body_type?: string | null
+          budget_range?: string | null
           color_palette?: string | null
           created_at?: string
           full_name?: string | null
+          height?: string | null
           id?: string
           occasions?: string[] | null
+          preferred_brands?: string[] | null
           style_preference?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      saved_outfits: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_favorite: boolean | null
+          items: Json | null
+          last_worn: string | null
+          name: string
+          occasion: string | null
+          season: string | null
+          times_worn: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          items?: Json | null
+          last_worn?: string | null
+          name: string
+          occasion?: string | null
+          season?: string | null
+          times_worn?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          items?: Json | null
+          last_worn?: string | null
+          name?: string
+          occasion?: string | null
+          season?: string | null
+          times_worn?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shopping_list: {
+        Row: {
+          category: string | null
+          created_at: string
+          estimated_price: number | null
+          id: string
+          is_purchased: boolean | null
+          item_name: string
+          notes: string | null
+          priority: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          estimated_price?: number | null
+          id?: string
+          is_purchased?: boolean | null
+          item_name: string
+          notes?: string | null
+          priority?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          estimated_price?: number | null
+          id?: string
+          is_purchased?: boolean | null
+          item_name?: string
+          notes?: string | null
+          priority?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      style_boards: {
+        Row: {
+          color_scheme: string[] | null
+          created_at: string
+          description: string | null
+          id: string
+          inspiration_urls: string[] | null
+          name: string
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          color_scheme?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          inspiration_urls?: string[] | null
+          name: string
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          color_scheme?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          inspiration_urls?: string[] | null
+          name?: string
+          tags?: string[] | null
           user_id?: string
         }
         Relationships: []
