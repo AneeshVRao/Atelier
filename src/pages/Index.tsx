@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ChevronRight, Heart, Shirt, Palette, Star } from "lucide-react";
+import { Sparkles, ChevronRight, Heart, Shirt, Palette, Star, LogOut, User } from "lucide-react";
+import { NavLink } from "@/components/NavLink";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import heroImage from "@/assets/hero-fashion.jpg";
 
 const styleOptions = [
@@ -29,6 +34,8 @@ const Index = () => {
   const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
   const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string | null>(null);
+  const { user, signOut, loading } = useAuth();
+  const navigate = useNavigate();
 
   const toggleOccasion = (id: string) => {
     setSelectedOccasions((prev) =>
@@ -44,18 +51,59 @@ const Index = () => {
     if (step > 0) setStep(step - 1);
   };
 
+  const handleSaveProfile = async () => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        style_preference: selectedStyle,
+        color_palette: selectedColors,
+        occasions: selectedOccasions
+      })
+      .eq("user_id", user.id);
+
+    if (error) {
+      toast.error("Failed to save profile");
+    } else {
+      toast.success("Style profile saved!");
+      navigate("/looks");
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Signed out successfully");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <h1 className="font-display text-2xl font-semibold tracking-tight">Atelier</h1>
+          <NavLink to="/" className="font-display text-2xl font-semibold tracking-tight">Atelier</NavLink>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Style Quiz</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wardrobe</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Looks</a>
+            <NavLink to="/" className="text-sm text-foreground font-medium">Style Quiz</NavLink>
+            <NavLink to="/wardrobe" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wardrobe</NavLink>
+            <NavLink to="/looks" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Looks</NavLink>
           </div>
-          <Button variant="elegant" size="sm">Get Started</Button>
+          {loading ? null : user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground hidden sm:block">{user.email}</span>
+              <Button variant="soft" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <Button variant="elegant" size="sm" onClick={() => navigate("/auth")}>
+              <User className="w-4 h-4 mr-2" />
+              Sign In
+            </Button>
+          )}
         </div>
       </nav>
 
@@ -81,7 +129,7 @@ const Index = () => {
                     Take Style Quiz
                     <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  <Button variant="soft" size="xl">
+                  <Button variant="soft" size="xl" onClick={() => navigate("/looks")}>
                     Explore Looks
                   </Button>
                 </div>
@@ -332,8 +380,8 @@ const Index = () => {
             </div>
 
             <div className="flex justify-center gap-4 mt-12 animate-fade-up" style={{ animationDelay: "0.4s" }}>
-              <Button variant="gold" size="xl">
-                Save My Profile
+              <Button variant="gold" size="xl" onClick={handleSaveProfile}>
+                {user ? "Save & Get Outfits" : "Sign In to Save"}
               </Button>
               <Button variant="soft" size="xl" onClick={() => setStep(0)}>
                 Start Over
@@ -345,9 +393,18 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="py-12 bg-card border-t border-border/50">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="font-display text-2xl font-medium mb-2">Atelier</h2>
-          <p className="text-sm text-muted-foreground">Your personal style, elevated</p>
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <h2 className="font-display text-2xl font-medium mb-2">Atelier</h2>
+              <p className="text-sm text-muted-foreground">Your personal style, elevated</p>
+            </div>
+            <div className="flex gap-8">
+              <NavLink to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Style Quiz</NavLink>
+              <NavLink to="/wardrobe" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wardrobe</NavLink>
+              <NavLink to="/looks" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Looks</NavLink>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
