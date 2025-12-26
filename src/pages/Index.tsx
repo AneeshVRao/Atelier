@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ChevronRight, Heart, Shirt, Palette, Star, LogOut, User } from "lucide-react";
+import { Sparkles, ChevronRight, Heart, Shirt, Palette, Star } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -74,38 +75,9 @@ const Index = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await signOut();
-    toast.success("Signed out successfully");
-  };
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <NavLink to="/" className="font-display text-2xl font-semibold tracking-tight">Atelier</NavLink>
-          <div className="hidden md:flex items-center gap-8">
-            <NavLink to="/" className="text-sm text-foreground font-medium">Style Quiz</NavLink>
-            <NavLink to="/wardrobe" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wardrobe</NavLink>
-            <NavLink to="/looks" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Looks</NavLink>
-          </div>
-          {loading ? null : user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground hidden sm:block">{user.email}</span>
-              <Button variant="soft" size="sm" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
-            </div>
-          ) : (
-            <Button variant="elegant" size="sm" onClick={() => navigate("/auth")}>
-              <User className="w-4 h-4 mr-2" />
-              Sign In
-            </Button>
-          )}
-        </div>
-      </nav>
+      <Navigation />
 
       {step === 0 && (
         <>
