@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Trash2, Shirt, ArrowLeft } from "lucide-react";
-import { NavLink } from "@/components/NavLink";
+import { Plus, Trash2, Shirt } from "lucide-react";
 
 interface WardrobeItem {
   id: string;
@@ -125,16 +125,7 @@ const Wardrobe = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <NavLink to="/" className="font-display text-2xl font-semibold tracking-tight">Atelier</NavLink>
-          <div className="hidden md:flex items-center gap-8">
-            <NavLink to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Style Quiz</NavLink>
-            <NavLink to="/wardrobe" className="text-sm text-foreground font-medium">Wardrobe</NavLink>
-            <NavLink to="/looks" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Looks</NavLink>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       <div className="pt-28 pb-20 container mx-auto px-6">
         <div className="flex items-center justify-between mb-8">
