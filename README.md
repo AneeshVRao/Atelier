@@ -6,23 +6,26 @@ A personal wardrobe intelligence system that tracks what you actually wear, mana
 
 ## Problem Statement
 
-Most wardrobe apps focus on cataloging clothes. They miss the more useful question: *what should I wear today, given what's clean, what I've worn recently, and what the weather looks like?*
+Most wardrobe apps focus on cataloging clothes. They miss the more useful question: _what should I wear today, given what's clean, what I've worn recently, and what the weather looks like?_
 
 Atelier approaches this differently. It tracks wear frequency and laundry state per item, builds a profile of your actual style from usage patterns (not just what you say you like), and uses that context to generate practical outfit suggestions.
 
-The goal is simple: reduce morning decision fatigue by surfacing outfits that make sense for *your* wardrobe, *today*.
+The goal is simple: reduce morning decision fatigue by surfacing outfits that make sense for _your_ wardrobe, _today_.
 
 ---
 
 ## Core Features
 
 ### Wardrobe Management
+
 - Add, edit, and delete clothing items with detailed metadata
 - Fields include: category, color, secondary color, pattern, material, fit, style tags, occasion, season
-- Search and filter by any attribute
+- Search by name, category, brand, or color
+- Filter by category, color, or wash status
 - Sort by wear frequency, last worn date, or wash status
 
 ### Laundry Tracking
+
 - Track wear count per item with customizable wash thresholds
 - View items that need washing in a dedicated laundry basket
 - Log washes with type (machine, hand, dry clean) and notes
@@ -30,13 +33,14 @@ The goal is simple: reduce morning decision fatigue by surfacing outfits that ma
 - Dashboard alerts when items need attention
 
 ### Style Intelligence
+
 - Automatic style distribution analysis (e.g., "65% minimalist, 20% casual")
 - Color palette extraction from your actual wardrobe
-- Comparison between declared preferences and learned behavior
 - Gap analysis for wardrobe variety
 - Versatility scoring based on item usage patterns
 
 ### AI Outfit Recommendations
+
 - Daily suggestions powered by Google Gemini
 - Context includes: weather, occasion, style profile, wear history
 - Option to exclude dirty items from suggestions
@@ -44,6 +48,7 @@ The goal is simple: reduce morning decision fatigue by surfacing outfits that ma
 - Save outfits to collections or mark as worn
 
 ### Additional Tools
+
 - Calendar-based outfit planning for future events
 - Shopping wishlist with priority levels
 - Style boards for visual inspiration
@@ -95,15 +100,13 @@ The goal is simple: reduce morning decision fatigue by surfacing outfits that ma
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React 18, TypeScript, Vite |
-| Styling | Tailwind CSS, shadcn/ui, Radix primitives |
-| State & Data | TanStack Query, React Context |
-| Backend | Supabase (Auth, PostgreSQL, Edge Functions) |
-| AI | Google Gemini API (via Edge Function) |
-| Validation | Zod |
-| Forms | React Hook Form |
+| Layer        | Technology                                  |
+| ------------ | ------------------------------------------- |
+| Frontend     | React 18, TypeScript, Vite                  |
+| Styling      | Tailwind CSS, shadcn/ui, Radix primitives   |
+| State & Data | TanStack Query, React Context               |
+| Backend      | Supabase (Auth, PostgreSQL, Edge Functions) |
+| AI           | Google Gemini API (via Edge Function)       |
 
 ---
 
@@ -163,31 +166,38 @@ npm run dev
 ## Key Design Decisions
 
 ### Laundry as First-Class Data
+
 Most wardrobe apps ignore garment state. Atelier tracks wear counts and wash status because recommending a shirt you wore three times this week isn't helpful.
 
 ### Learned Style Over Declared Style
+
 Users often describe their style aspirationally. The style analyzer examines what's actually in the wardrobe and how often items are worn, then compares this to stated preferences.
 
 ### AI as the Last Step
+
 Gemini receives rich context—style distribution, color analysis, weather, clean items only—so it can make informed suggestions rather than generic ones. The AI doesn't drive the system; it consumes the system's intelligence.
 
 ### TypeScript Strict Mode
+
 The codebase runs with `strict: true`. All types are explicit. No `any` escape hatches in application code.
 
 ### Code Splitting
-Routes are lazy-loaded. Vendor dependencies are chunked by domain (React, Radix, data libraries, charts). Initial bundle stays under 150KB.
+
+Routes are lazy-loaded. Vendor dependencies are chunked by domain (React, Radix, data libraries, charts). Initial JS bundle is ~114KB (gzip: ~35KB).
 
 ---
 
 ## Roadmap
 
 **Completed:**
+
 - Core wardrobe CRUD
 - Laundry tracking system
 - Style intelligence engine
 - AI outfit generation with context
 
 **Next:**
+
 - Image upload for wardrobe items
 - Link saved outfits to specific wardrobe item IDs
 - "What I Wore" history view with photos
@@ -200,6 +210,7 @@ Routes are lazy-loaded. Vendor dependencies are chunked by domain (React, Radix,
 This is a personal project under active development. It's not production-ready and isn't accepting external contributions at this time.
 
 If you're exploring the codebase for learning purposes, start with:
+
 - `src/lib/styleAnalyzer.ts` — core style analysis logic
 - `src/hooks/useDataQueries.ts` — TanStack Query patterns
 - `supabase/functions/generate-outfit/index.ts` — AI integration

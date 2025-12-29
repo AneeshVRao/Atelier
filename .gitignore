@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Compiled outputs in source (should not exist)
+src/**/dist/
+
 # Environment files
 .env
 .env.local
