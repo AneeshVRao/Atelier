@@ -646,16 +646,16 @@ const Wardrobe = () => {
                   <div>
                     <Label>Secondary Color (for patterns)</Label>
                     <Select
-                      value={newItem.secondary_color}
+                      value={newItem.secondary_color || "none"}
                       onValueChange={(v) =>
-                        setNewItem({ ...newItem, secondary_color: v })
+                        setNewItem({ ...newItem, secondary_color: v === "none" ? "" : v })
                       }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Optional" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
                         {colors.map((color) => (
                           <SelectItem key={color} value={color}>
                             {color}
@@ -1045,15 +1045,16 @@ const Wardrobe = () => {
                     <Label>Secondary Color</Label>
                     <Select
                       value={editForm.secondary_color}
+                      value={editForm.secondary_color || "none"}
                       onValueChange={(value) =>
-                        setEditForm({ ...editForm, secondary_color: value })
+                        setEditForm({ ...editForm, secondary_color: value === "none" ? "" : value })
                       }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Optional" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
                         {colors.map((color) => (
                           <SelectItem key={color} value={color}>
                             {color}
