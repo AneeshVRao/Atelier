@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,14 +13,12 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user, signIn, signUp } = useAuth();
+  const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
+  // Get the intended destination after login
+  const from = (location.state as { from?: string })?.from || "/dashboard";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +35,7 @@ const Auth = () => {
           }
         } else {
           toast.success("Welcome back!");
-          navigate("/");
+          navigate(from, { replace: true });
         }
       } else {
         if (password.length < 6) {
@@ -48,13 +46,15 @@ const Auth = () => {
         const { error } = await signUp(email, password, fullName);
         if (error) {
           if (error.message.includes("already registered")) {
-            toast.error("This email is already registered. Please sign in instead.");
+            toast.error(
+              "This email is already registered. Please sign in instead."
+            );
           } else {
             toast.error(error.message);
           }
         } else {
           toast.success("Account created! Welcome to Atelier.");
-          navigate("/");
+          navigate("/dashboard", { replace: true });
         }
       }
     } catch (error) {
@@ -72,7 +72,9 @@ const Auth = () => {
             <Sparkles className="w-8 h-8 text-gold" />
           </div>
           <h1 className="font-display text-3xl font-medium mb-2">Atelier</h1>
-          <p className="text-muted-foreground">Your personal style journey awaits</p>
+          <p className="text-muted-foreground">
+            Your personal style journey awaits
+          </p>
         </div>
 
         <div className="bg-card rounded-2xl p-8 border border-border/50 shadow-card">
@@ -80,7 +82,9 @@ const Auth = () => {
             <button
               onClick={() => setIsLogin(true)}
               className={`flex-1 pb-2 text-sm font-medium transition-colors ${
-                isLogin ? "border-b-2 border-gold text-foreground" : "text-muted-foreground"
+                isLogin
+                  ? "border-b-2 border-gold text-foreground"
+                  : "text-muted-foreground"
               }`}
             >
               Sign In
@@ -88,7 +92,9 @@ const Auth = () => {
             <button
               onClick={() => setIsLogin(false)}
               className={`flex-1 pb-2 text-sm font-medium transition-colors ${
-                !isLogin ? "border-b-2 border-gold text-foreground" : "text-muted-foreground"
+                !isLogin
+                  ? "border-b-2 border-gold text-foreground"
+                  : "text-muted-foreground"
               }`}
             >
               Create Account
@@ -146,8 +152,18 @@ const Auth = () => {
               </div>
             </div>
 
-            <Button type="submit" variant="gold" className="w-full" size="lg" disabled={loading}>
-              {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
+            <Button
+              type="submit"
+              variant="gold"
+              className="w-full"
+              size="lg"
+              disabled={loading}
+            >
+              {loading
+                ? "Please wait..."
+                : isLogin
+                ? "Sign In"
+                : "Create Account"}
             </Button>
           </form>
         </div>
